@@ -1,0 +1,38 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowEcommercePaymentAccess",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListAllMyBuckets",
+        "s3:ListBucket",
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::ecommerce-payment-data",
+        "arn:aws:s3:::ecommerce-payment-data/*"
+      ],
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": "Public_Ip_adderess/24"
+        }
+      }
+    },
+    {
+      "Sid": "RestrictAccessToEcommerceFinanceTeam",
+      "Effect": "Deny",
+      "Action": "s3:*",
+      "Resource": [
+        "arn:aws:s3:::ecommerce-payment-data",
+        "arn:aws:s3:::ecommerce-payment-data/*"
+      ],
+      "Condition": {
+        "StringNotEquals": {
+          "aws:PrincipalTag/Role": "analyst_team"
+        }
+      }
+    }
+  ]
+}
